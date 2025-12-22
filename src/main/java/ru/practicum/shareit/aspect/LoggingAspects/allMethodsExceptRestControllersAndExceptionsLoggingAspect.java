@@ -29,7 +29,7 @@ public class allMethodsExceptRestControllersAndExceptionsLoggingAspect {
     }
 
     // Итоговый pointcut: все методы кроме тех, что в @RestController классах
-    @Pointcut("allMethodsInPackage() && !restControllerClasses() && !exceptionsClasses")
+    @Pointcut("allMethodsInPackage() && !restControllerClasses() && !exceptionsClasses()")
     public void allMethodsExceptRestControllersAndExceptions() {
     }
 

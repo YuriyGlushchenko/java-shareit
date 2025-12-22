@@ -48,5 +48,10 @@ public class UserStorageImpl implements UserStorage {
         return user;
     }
 
+    @Override
+    public void delete(long id) {
+        storage.remove(id);
+    }
+
 
 }

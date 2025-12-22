@@ -29,7 +29,7 @@ public class UserController {
         return userService.saveUser(userRequestDTO);
     }
 
-    @PutMapping("/{userId}")
+    @PatchMapping("/{userId}")
     public UserDTO updateUser(@PathVariable("userId") long userId, @RequestBody UpdateUserRequestDTO request) {
         return userService.updateUser(userId, request);
     }
@@ -38,6 +38,12 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public UserDTO getUserById(@PathVariable("userId") long userId) {
         return userService.getUserById(userId);
+    }
+
+    @DeleteMapping("/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@PathVariable("userId") long userId) {
+        userService.deleteUser(userId);
     }
 
 }
