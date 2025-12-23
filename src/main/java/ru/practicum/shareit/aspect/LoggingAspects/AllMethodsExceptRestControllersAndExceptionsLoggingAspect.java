@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @Order(30)
-public class allMethodsExceptRestControllersAndExceptionsLoggingAspect {
+public class AllMethodsExceptRestControllersAndExceptionsLoggingAspect {
 
     // Pointcut для ВСЕХ методов в пакете ru.practicum и подпакетах
     @Pointcut("execution(* ru.practicum.shareit..*.*(..))")
