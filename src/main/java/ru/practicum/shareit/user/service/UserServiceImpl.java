@@ -21,8 +21,8 @@ public class UserServiceImpl implements UserService {
     private final UserStorage userRepository;
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll().stream().map(UserMapper::mapToUserDto).toList();
     }
 
     @Override
@@ -51,13 +51,13 @@ public class UserServiceImpl implements UserService {
             throw new DuplicatedDataException("Данный email уже используется");
         }
 
-        User updatedUser = userRepository.findById(userId)
-                .map(user -> UserMapper.updateUserFields(user, request))
+        User user = userRepository.findById(userId)
+                .map(u -> UserMapper.updateUserFields(u, request))
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-        updatedUser = userRepository.update(updatedUser);
+        user = userRepository.update(user);
 
-        return UserMapper.mapToUserDto(updatedUser);
+        return UserMapper.mapToUserDto(user);
     }
 
     @Override

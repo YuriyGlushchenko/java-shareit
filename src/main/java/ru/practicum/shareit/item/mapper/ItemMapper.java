@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.dto.ItemDTO;
 import ru.practicum.shareit.item.dto.NewItemRequestDTO;
+import ru.practicum.shareit.item.dto.UpdateItemRequestDTO;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
@@ -26,28 +27,24 @@ public final class ItemMapper {
     }
 
     public static ItemDTO mapToItemDto(Item item) {
-//        PostDto dto = new PostDto();
-//        dto.setId(post.getId());
-//        dto.setDescription(post.getDescription());
-//        dto.setPostDate(post.getPostDate());
-//
-//        User author = post.getAuthor();
-//        dto.setAuthor(UserMapper.mapToUserDto(author));
-//
-//        if (Objects.nonNull(post.getImages())) {
-//            List<Long> imageIds = post.getImages()
-//                    .stream()
-//                    .map(Image::getId)
-//                    .collect(Collectors.toList());
-//            dto.setImages(imageIds);
-//        }
-        ItemDTO itemDTO = ItemDTO.builder()
+        return ItemDTO.builder()
                 .id(item.getId())
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
                 .build();
+    }
 
-        return itemDTO;
+    public static Item updateItemFields(Item item, UpdateItemRequestDTO request) {
+        if (request.hasName()) {
+            item.setName(request.getName());
+        }
+        if (request.hasDescription()) {
+            item.setDescription(request.getDescription());
+        }
+        if (request.hasAvailable()) {
+            item.setAvailable(request.getAvailable());
+        }
+        return item;
     }
 }

@@ -3,12 +3,11 @@ package ru.practicum.shareit.user.service;
 import ru.practicum.shareit.user.dto.NewUserRequestDTO;
 import ru.practicum.shareit.user.dto.UpdateUserRequestDTO;
 import ru.practicum.shareit.user.dto.UserDTO;
-import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
 
 public interface UserService {
-    List<User> getAllUsers();
+    List<UserDTO> getAllUsers();
 
     UserDTO saveUser(NewUserRequestDTO user);
 
