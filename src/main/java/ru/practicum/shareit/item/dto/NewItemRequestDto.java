@@ -8,7 +8,7 @@ import lombok.Data;
  * TODO Sprint add-controllers.
  */
 @Data
-public class NewItemRequestDTO {
+public class NewItemRequestDto {
 
     @NotBlank
     private String name;

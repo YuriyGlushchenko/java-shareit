@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exceptions.exceptions.ConditionsNotMetException;
 import ru.practicum.shareit.exceptions.exceptions.NotFoundException;
-import ru.practicum.shareit.item.dto.ItemDTO;
-import ru.practicum.shareit.item.dto.NewItemRequestDTO;
-import ru.practicum.shareit.item.dto.UpdateItemRequestDTO;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.NewItemRequestDto;
+import ru.practicum.shareit.item.dto.UpdateItemRequestDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.ItemStorage;
@@ -22,7 +22,7 @@ public class ItemServiceImpl implements ItemService {
     private final ItemStorage itemRepository;
 
     @Override
-    public ItemDTO addNewItem(Long userId, NewItemRequestDTO itemRequestDTO) {
+    public ItemDto addNewItem(Long userId, NewItemRequestDto itemRequestDTO) {
         User owner = userRepository.findById(userId)
                 .orElseThrow(() -> new ConditionsNotMetException("Пользователь с id: " + userId + "не найден."));
 
@@ -33,7 +33,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDTO updateItem(long userId, long itemId, UpdateItemRequestDTO requestDTO) {
+    public ItemDto updateItem(long userId, long itemId, UpdateItemRequestDto requestDTO) {
         User owner = userRepository.findById(userId)
                 .orElseThrow(() -> new ConditionsNotMetException("Пользователь с id: " + userId + "не найден."));
 
@@ -46,46 +46,35 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new NotFoundException("Вещь с id: " + itemId + "не найдена"));
 
         item = itemRepository.update(item);
-        ItemDTO itemDto = ItemMapper.mapToItemDto(item);
-        setSharingCount(itemDto);
 
-        return itemDto;
+        return ItemMapper.mapToItemDto(item);
 
-    }
-
-    private void setSharingCount(ItemDTO itemDTO) {
-        // toDo допилить в след. спринтах
-
-        int count = itemRepository.getSharingCount(itemDTO.getId());
-        itemDTO.setShareCount(count);
     }
 
     @Override
-    public ItemDTO getItemById(long itemId) {
+    public ItemDto getItemById(long itemId) {
         return itemRepository.findById(itemId)
                 .map(ItemMapper::mapToItemDto)
                 .orElseThrow(() -> new NotFoundException("Вещь c id: " + itemId + " не найдена"));
     }
 
     @Override
-    public List<ItemDTO> searchItems(String qury) {
-        if (qury == null || qury.isBlank()) {
+    public List<ItemDto> searchItems(String query) {
+        if (query == null || query.isBlank()) {
             return List.of();
         }
 
-        return itemRepository.search(qury.toLowerCase())
+        return itemRepository.search(query.toLowerCase())
                 .stream()
                 .map(ItemMapper::mapToItemDto)
-                .peek(this::setSharingCount)
                 .toList();
     }
 
     @Override
-    public List<ItemDTO> getOwnerItems(long userId) {
+    public List<ItemDto> getOwnerItems(long userId) {
         return itemRepository.getItemsByOwnerId(userId)
                 .stream()
                 .map(ItemMapper::mapToItemDto)
-                .peek(this::setSharingCount)
                 .toList();
     }
 }

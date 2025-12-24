@@ -2,12 +2,11 @@ package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exceptions.exceptions.ConditionsNotMetException;
 import ru.practicum.shareit.exceptions.exceptions.DuplicatedDataException;
 import ru.practicum.shareit.exceptions.exceptions.NotFoundException;
-import ru.practicum.shareit.user.dto.NewUserRequestDTO;
-import ru.practicum.shareit.user.dto.UpdateUserRequestDTO;
-import ru.practicum.shareit.user.dto.UserDTO;
+import ru.practicum.shareit.user.dto.NewUserRequestDto;
+import ru.practicum.shareit.user.dto.UpdateUserRequestDto;
+import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.UserStorage;
@@ -21,15 +20,12 @@ public class UserServiceImpl implements UserService {
     private final UserStorage userRepository;
 
     @Override
-    public List<UserDTO> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         return userRepository.findAll().stream().map(UserMapper::mapToUserDto).toList();
     }
 
     @Override
-    public UserDTO saveUser(NewUserRequestDTO request) {
-        if (request.getEmail() == null || request.getEmail().isEmpty()) {
-            throw new ConditionsNotMetException("email должен быть указан");
-        }
+    public UserDto saveUser(NewUserRequestDto request) {
 
         Optional<User> existedUser = userRepository.findByEmail(request.getEmail());
         if (existedUser.isPresent()) {
@@ -44,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUser(long userId, UpdateUserRequestDTO request) {
+    public UserDto updateUser(long userId, UpdateUserRequestDto request) {
         Optional<User> userWithExistedEmail = userRepository.findByEmail(request.getEmail());
 
         if (userWithExistedEmail.isPresent() && userWithExistedEmail.get().getId() != userId) {
@@ -61,7 +57,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO getUserById(long id) {
+    public UserDto getUserById(long id) {
         return userRepository.findById(id)
                 .map(UserMapper::mapToUserDto)
                 .orElseThrow(() -> new NotFoundException("Пользователь c id: " + id + " не найден"));

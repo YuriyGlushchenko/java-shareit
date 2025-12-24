@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
-import ru.practicum.shareit.user.dto.UserDTO;
+import ru.practicum.shareit.user.dto.UserDto;
 
 import java.time.LocalDateTime;
 
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 @Builder
 @Data
-public class RequestDTO {
+public class RequestDto {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
@@ -22,7 +22,7 @@ public class RequestDTO {
     @NotBlank
     private String description;
 
-    private UserDTO requestor;
+    private UserDto requestor;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime created;

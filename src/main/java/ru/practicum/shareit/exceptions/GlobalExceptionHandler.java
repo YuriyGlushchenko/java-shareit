@@ -11,7 +11,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.shareit.exceptions.exceptions.*;
+import ru.practicum.shareit.exceptions.exceptions.ConditionsNotMetException;
+import ru.practicum.shareit.exceptions.exceptions.DuplicatedDataException;
+import ru.practicum.shareit.exceptions.exceptions.NotFoundException;
+import ru.practicum.shareit.exceptions.exceptions.ValidationException;
 import ru.practicum.shareit.exceptions.responses.ErrorMessage;
 import ru.practicum.shareit.exceptions.responses.ValidationError;
 import ru.practicum.shareit.exceptions.responses.ValidationErrorResponse;
@@ -95,9 +98,9 @@ public class GlobalExceptionHandler {
         return new ErrorMessage("CONFLICT", ex.getMessage());
     }
 
-    @ExceptionHandler(InternalServerException.class)
+    @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorMessage handleInternalServerException(InternalServerException ex) {
+    public ErrorMessage handleException(Exception ex) {
 
         return new ErrorMessage("INTERNAL_SERVER_ERROR", ex.getMessage());
     }

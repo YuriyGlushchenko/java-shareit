@@ -5,11 +5,18 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class NewUserRequestDTO {
+public class UpdateUserRequestDto {
     @Email
-    @NotBlank
     private String email;
 
     @NotBlank
     private String name;
+
+    public boolean hasNname() {
+        return !(name == null || name.isBlank());
+    }
+
+    public boolean hasEmail() {
+        return !(email == null || email.isBlank());
+    }
 }

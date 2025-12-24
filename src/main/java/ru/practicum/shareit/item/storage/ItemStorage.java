@@ -13,8 +13,6 @@ public interface ItemStorage {
 
     Item update(Item item);
 
-    int getSharingCount(long itemID);
-
     List<Item> getItemsByOwnerId(long ownerID);
 
     List<Item> search(String query);

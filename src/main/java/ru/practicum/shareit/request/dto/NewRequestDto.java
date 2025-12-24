@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class UpdateRequestDTO {
+public class NewRequestDto {
     private Long id;
 
     @NotBlank

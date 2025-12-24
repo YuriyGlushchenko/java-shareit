@@ -31,9 +31,6 @@ public class ItemStorageImpl implements ItemStorage {
 
     @Override
     public Item save(Item item) {
-        if (item == null) {
-            throw new IllegalArgumentException("Item cannot be null");
-        }
 
         Long newId = idGenerator.getAndIncrement();
         item.setId(newId);
@@ -43,10 +40,6 @@ public class ItemStorageImpl implements ItemStorage {
         return item;
     }
 
-    @Override
-    public int getSharingCount(long itemID) {
-        return 0;
-    }
 
     @Override
     public List<Item> getItemsByOwnerId(long ownerID) {
