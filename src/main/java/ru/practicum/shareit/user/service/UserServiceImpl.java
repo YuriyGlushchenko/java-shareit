@@ -27,11 +27,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto saveUser(NewUserRequestDto request) {
 
+        //  ToDo удалить после подключения БД, там есть ограничение unique
         Optional<User> existedUser = userRepository.findByEmail(request.getEmail());
         if (existedUser.isPresent()) {
             throw new DuplicatedDataException("Данный email уже используется");
         }
-
 
         User user = UserMapper.mapToUser(request);
         user = userRepository.save(user);
