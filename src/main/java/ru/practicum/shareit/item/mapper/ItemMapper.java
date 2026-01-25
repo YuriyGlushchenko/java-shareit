@@ -12,18 +12,12 @@ import ru.practicum.shareit.user.model.User;
 public final class ItemMapper {
 
     public static Item mapToItem(NewItemRequestDto request, User owner) {
-        Item item = Item.builder()
+        return Item.builder()
                 .name(request.getName())
                 .description(request.getDescription())
                 .available(request.getAvailable())
-                .ownerId(owner.getId())
+                .owner(owner)
                 .build();
-
-        if (request.getAvailable() != null) {
-            item.setAvailable(request.getAvailable());
-        }
-
-        return item;
     }
 
     public static ItemDto mapToItemDto(Item item) {

@@ -45,7 +45,7 @@ public class ItemStorageImpl implements ItemStorage {
     public List<Item> getItemsByOwnerId(long ownerID) {
         return storage.values()
                 .stream()
-                .filter(item -> item.getOwnerId() == ownerID)
+                .filter(item -> item.getOwner().getId() == ownerID)
                 .toList();
     }
 
