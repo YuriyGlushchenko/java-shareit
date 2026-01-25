@@ -2,11 +2,16 @@ package ru.practicum.shareit.item.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.mapper.BookingMapper;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.NewItemRequestDto;
 import ru.practicum.shareit.item.dto.UpdateItemRequestDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
+
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ItemMapper {
@@ -40,5 +45,33 @@ public final class ItemMapper {
             item.setAvailable(request.getAvailable());
         }
         return item;
+    }
+
+    public static ItemDto mapToItemDto(Item item, Booking lastBooking, Booking nextBooking) {
+        return ItemDto.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .lastBooking(BookingMapper.toShortDto(lastBooking))
+                .nextBooking(BookingMapper.toShortDto(nextBooking))
+                .build();
+    }
+
+    public static ItemDto mapToItemDto(
+            Item item,
+            Booking lastBooking,
+            Booking nextBooking,
+            List<CommentDto> comments
+    ) {
+        return ItemDto.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .lastBooking(BookingMapper.toShortDto(lastBooking))
+                .nextBooking(BookingMapper.toShortDto(nextBooking))
+                .comments(comments)
+                .build();
     }
 }

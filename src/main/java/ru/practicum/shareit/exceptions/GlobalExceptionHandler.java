@@ -107,7 +107,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ConditionsNotMetException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorMessage handleConditionsNotMetException(ConditionsNotMetException ex) {
 
         return new ErrorMessage("UNPROCESSABLE_ENTITY", ex.getMessage());

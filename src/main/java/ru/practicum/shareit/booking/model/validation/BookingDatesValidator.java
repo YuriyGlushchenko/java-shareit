@@ -1,8 +1,8 @@
-package ru.practicum.shareit.booking.validation;
+package ru.practicum.shareit.booking.model.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import ru.practicum.shareit.booking.dto.NewBookingRequestDto;
+import ru.practicum.shareit.booking.model.dto.NewBookingRequestDto;
 
 public class BookingDatesValidator
         implements ConstraintValidator<ValidBookingDates, NewBookingRequestDto> {

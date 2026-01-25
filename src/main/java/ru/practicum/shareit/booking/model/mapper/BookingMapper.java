@@ -1,11 +1,10 @@
-package ru.practicum.shareit.booking.mapper;
+package ru.practicum.shareit.booking.model.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.booking.dto.BookingDto;
-import ru.practicum.shareit.booking.dto.NewBookingRequestDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
+import ru.practicum.shareit.booking.model.dto.*;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
@@ -32,7 +31,27 @@ public final class BookingMapper {
                 .start(booking.getStart())
                 .end(booking.getEnd())
                 .status(booking.getStatus())
-                .itemId(booking.getItem().getId())
+                .item(
+                        BookingItemDto.builder()
+                                .id(booking.getItem().getId())
+                                .name(booking.getItem().getName())
+                                .build()
+                )
+                .booker(
+                        BookingUserDto.builder()
+                                .id(booking.getBooker().getId())
+                                .build()
+                )
+                .build();
+    }
+
+    public static BookingShortDto toShortDto(Booking booking) {
+        if (booking == null) {
+            return null;
+        }
+
+        return BookingShortDto.builder()
+                .id(booking.getId())
                 .bookerId(booking.getBooker().getId())
                 .build();
     }

@@ -5,6 +5,9 @@ import lombok.*;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "items")
 @Builder
@@ -42,6 +45,10 @@ public class Item {
     @JoinColumn(name = "request_id")
     @ToString.Exclude  // Чтобы избежать случайной lazy-загрузки
     private ItemRequest request;
+
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private Set<Comment> comments = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

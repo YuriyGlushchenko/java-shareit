@@ -9,7 +9,7 @@ import ru.practicum.shareit.user.dto.UpdateUserRequestDto;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.storage.UserStorage;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +17,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final UserStorage userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<UserDto> getAllUsers() {
@@ -26,12 +26,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto saveUser(NewUserRequestDto request) {
-
-        //  ToDo удалить после подключения БД, там есть ограничение unique
-        Optional<User> existedUser = userRepository.findByEmail(request.getEmail());
-        if (existedUser.isPresent()) {
-            throw new DuplicatedDataException("Данный email уже используется");
-        }
 
         User user = UserMapper.mapToUser(request);
         user = userRepository.save(user);
@@ -51,7 +45,7 @@ public class UserServiceImpl implements UserService {
                 .map(u -> UserMapper.updateUserFields(u, request))
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-        user = userRepository.update(user);
+        user = userRepository.save(user);
 
         return UserMapper.mapToUserDto(user);
     }
@@ -64,6 +58,6 @@ public class UserServiceImpl implements UserService {
     }
 
     public void deleteUser(long id) {
-        userRepository.delete(id);
+        userRepository.deleteById(id);
     }
 }
