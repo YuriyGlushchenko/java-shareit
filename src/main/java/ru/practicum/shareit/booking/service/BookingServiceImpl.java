@@ -1,9 +1,12 @@
 package ru.practicum.shareit.booking.service;
 
+import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.querydsl.QSort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.QBooking;
 import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.model.dto.BookingDto;
@@ -104,17 +107,7 @@ public class BookingServiceImpl implements BookingService {
         userRepository.findById(userId)
                 .orElseThrow(() -> new ConditionsNotMetException("Пользователь не найден"));
 
-        LocalDateTime now = LocalDateTime.now();
-
-        List<Booking> bookings = switch (state) {
-            case CURRENT -> bookingRepository.findByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(
-                    userId, now, now);
-            case PAST -> bookingRepository.findByBookerIdAndEndBeforeOrderByStartDesc(userId, now);
-            case FUTURE -> bookingRepository.findByBookerIdAndStartAfterOrderByStartDesc(userId, now);
-            case WAITING -> bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId, Status.WAITING);
-            case REJECTED -> bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId, Status.REJECTED);
-            case ALL -> bookingRepository.findByBookerIdOrderByStartDesc(userId);
-        };
+        List<Booking> bookings = findBookings(userId, state, false);
 
         return bookings.stream()
                 .map(BookingMapper::mapToBookingDto)
@@ -127,21 +120,61 @@ public class BookingServiceImpl implements BookingService {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
-        LocalDateTime now = LocalDateTime.now();
-
-        List<Booking> bookings = switch (state) {
-            case CURRENT -> bookingRepository.findByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(
-                    userId, now, now);
-            case PAST -> bookingRepository.findByItemOwnerIdAndEndBeforeOrderByStartDesc(userId, now);
-            case FUTURE -> bookingRepository.findByItemOwnerIdAndStartAfterOrderByStartDesc(userId, now);
-            case WAITING -> bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(userId, Status.WAITING);
-            case REJECTED -> bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(userId, Status.REJECTED);
-            case ALL -> bookingRepository.findByItemOwnerIdOrderByStartDesc(userId);
-        };
+        List<Booking> bookings = findBookings(userId, state, true);
 
         return bookings.stream()
                 .map(BookingMapper::mapToBookingDto)
                 .toList();
+    }
+
+    public List<Booking> findBookings(Long userId, State state, boolean isOwner) {
+        BooleanBuilder predicate = new BooleanBuilder();
+
+        if (isOwner) {
+            // Получение списка всех бронирований всех вещей, принадлежащих пользователю: item.owner.id = userId
+            predicate.and(QBooking.booking.item.owner.id.eq(userId));
+        } else {
+            // Получение списка всех бронирований, которые делал текущий пользователь: booker.id = userId
+            predicate.and(QBooking.booking.booker.id.eq(userId));
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+
+        switch (state) {
+            case CURRENT:
+                // Текущие: start <= now AND end >= now
+                predicate.and(QBooking.booking.start.loe(now));
+                predicate.and(QBooking.booking.end.goe(now));
+                break;
+
+            case PAST:
+                // Прошедшие: end < now
+                predicate.and(QBooking.booking.end.lt(now));
+                break;
+
+            case FUTURE:
+                // Будущие: start > now
+                predicate.and(QBooking.booking.start.gt(now));
+                break;
+
+            case WAITING:
+                // Ожидающие подтверждения
+                predicate.and(QBooking.booking.status.eq(Status.WAITING));
+                break;
+
+            case REJECTED:
+                // Отклоненные
+                predicate.and(QBooking.booking.status.eq(Status.REJECTED));
+                break;
+
+            case ALL:
+                // Все - не добавляем никаких условий по статусу или времени
+                break;
+        }
+
+        // возвращает Iterable, по этому приведение типов к List
+        return (List<Booking>) bookingRepository.findAll(predicate,QSort.by(QBooking.booking.start.desc())
+        );
     }
 
 }
