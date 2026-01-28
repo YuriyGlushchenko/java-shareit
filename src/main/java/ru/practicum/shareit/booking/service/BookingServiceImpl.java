@@ -44,6 +44,14 @@ public class BookingServiceImpl implements BookingService {
             throw new ConditionsNotMetException("Владелец не может бронировать свою вещь");
         }
 
+        if (bookingRepository.existsOverlappingBooking(
+                bookingRequest.getItemId(),
+                bookingRequest.getStart(),
+                bookingRequest.getEnd(),
+                List.of(Status.APPROVED, Status.WAITING))) {
+            throw new ConditionsNotMetException("Бронирование пересекается с уже существующим бронированием");
+        }
+
         Booking booking = BookingMapper.mapToBooking(bookingRequest, item, booker);
         booking = bookingRepository.save(booking);
 
@@ -56,6 +64,9 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new ConditionsNotMetException("Бронирование с id: " + bookingId + "не найдено."));
 
         Long ownerId = booking.getItem().getOwner().getId();
+        userRepository.findById(userId)
+                .orElseThrow(() -> new ConditionsNotMetException("Пользователь с id: " + userId + "не найден."));
+
 
         if (!userId.equals(ownerId)) {
             throw new ConditionsNotMetException("Изменить статус бронирования может только владелец вещи");
@@ -76,6 +87,9 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new ConditionsNotMetException("Бронирование с id: " + bookingId + "не найдено."));
 
         Long ownerId = booking.getItem().getOwner().getId();
+
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с id: " + userId + "не найден."));
 
         if (!userId.equals(ownerId) && !userId.equals(booking.getBooker().getId())) {
             throw new ConditionsNotMetException("Данные по бронированию может получить либо владелец вещи, либо тот кто бронировал.");

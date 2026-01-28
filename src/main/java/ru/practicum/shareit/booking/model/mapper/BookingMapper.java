@@ -4,7 +4,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
-import ru.practicum.shareit.booking.model.dto.*;
+import ru.practicum.shareit.booking.model.dto.BookingDto;
+import ru.practicum.shareit.booking.model.dto.BookingShortDto;
+import ru.practicum.shareit.booking.model.dto.NewBookingRequestDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
@@ -32,14 +34,15 @@ public final class BookingMapper {
                 .end(booking.getEnd())
                 .status(booking.getStatus())
                 .item(
-                        BookingItemDto.builder()
+                        BookingDto.BookingItemDto.builder()
                                 .id(booking.getItem().getId())
                                 .name(booking.getItem().getName())
                                 .build()
                 )
                 .booker(
-                        BookingUserDto.builder()
+                        BookingDto.BookingUserDto.builder()
                                 .id(booking.getBooker().getId())
+                                .name(booking.getBooker().getName())
                                 .build()
                 )
                 .build();
