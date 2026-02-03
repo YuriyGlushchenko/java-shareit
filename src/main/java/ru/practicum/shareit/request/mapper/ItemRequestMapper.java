@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class RequestMapper {
+public final class ItemRequestMapper {
     public static ItemRequest mapToItemRequest(NewRequestDto request, User requestor) {
         return ItemRequest.builder()
                 .description(request.getDescription())
