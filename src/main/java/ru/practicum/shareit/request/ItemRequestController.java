@@ -3,7 +3,7 @@ package ru.practicum.shareit.request;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.request.dto.NewRequestDto;
+import ru.practicum.shareit.request.dto.NewRequestDtoDetailed;
 import ru.practicum.shareit.request.dto.RequestDto;
 import ru.practicum.shareit.request.service.ItemRequestService;
 
@@ -20,29 +20,28 @@ public class ItemRequestController {
 
     @PostMapping
     public RequestDto add(@RequestHeader("X-Sharer-User-Id") Long userId,
-                          @RequestBody @Valid NewRequestDto request) {
+                          @RequestBody @Valid NewRequestDtoDetailed request) {
         return itemRequestService.addNewRequest(userId, request);
     }
 
     @GetMapping
-    public List<RequestDto> getUserRequests(@RequestHeader("X-Sharer-User-Id") Long userId){
+    public List<RequestDto> getUserRequests(@RequestHeader("X-Sharer-User-Id") Long userId) {
         return itemRequestService.getUserRequests(userId);
 
     }
 
     @GetMapping("/all")
-    public List<RequestDto> getRequests(@RequestHeader("X-Sharer-User-Id") Long userId){
+    public List<RequestDto> getRequests(@RequestHeader("X-Sharer-User-Id") Long userId) {
         return itemRequestService.getRequests(userId);
 
     }
 
     @GetMapping("/{requestId}")
-    public List<RequestDto> getUserRequests(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                            @PathVariable Long  requestId){
+    public RequestDto getUserRequests(@RequestHeader("X-Sharer-User-Id") Long userId,
+                                      @PathVariable Long requestId) {
         return itemRequestService.getRequest(userId, requestId);
 
     }
-
 
 
 }

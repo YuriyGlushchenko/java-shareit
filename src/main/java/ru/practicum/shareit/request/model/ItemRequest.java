@@ -2,9 +2,12 @@ package ru.practicum.shareit.request.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TODO Sprint add-item-requests.
@@ -40,17 +43,19 @@ public class ItemRequest {
     @Builder.Default
     private LocalDateTime created = LocalDateTime.now();
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null) return false;
-        if (getClass() != o.getClass()) return false;
-        ItemRequest other = (ItemRequest) o;
-        return id != null && id.equals(other.id);
+    @OneToMany(mappedBy = "request", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @Builder.Default
+    private List<Item> items = new ArrayList<>();
+
+    public void addItem(Item item) {
+        items.add(item);
+        item.setRequest(this);
     }
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
+    public void removeItem(Item item) {
+        items.remove(item);
+        item.setRequest(null);
     }
+
 }

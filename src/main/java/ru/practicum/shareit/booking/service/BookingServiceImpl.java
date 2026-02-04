@@ -173,7 +173,7 @@ public class BookingServiceImpl implements BookingService {
         }
 
         // возвращает Iterable, по этому приведение типов к List
-        return (List<Booking>) bookingRepository.findAll(predicate,QSort.by(QBooking.booking.start.desc())
+        return (List<Booking>) bookingRepository.findAll(predicate, QSort.by(QBooking.booking.start.desc())
         );
     }
 

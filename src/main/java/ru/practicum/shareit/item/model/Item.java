@@ -46,6 +46,13 @@ public class Item {
     @ToString.Exclude  // Чтобы избежать случайной lazy-загрузки
     private ItemRequest request;
 
+    public void setRequest(ItemRequest request) {
+        this.request = request;
+        if (request != null && !request.getItems().contains(this)) {
+            request.getItems().add(this);
+        }
+    }
+
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
     @ToString.Exclude
     private Set<Comment> comments = new HashSet<>();
