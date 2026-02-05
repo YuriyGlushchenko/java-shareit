@@ -15,6 +15,8 @@ import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -31,35 +33,53 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final ItemRequestRepository itemRequestRepository;
 
     @Override
     public ItemDto addNewItem(Long userId, NewItemRequestDto itemRequestDTO) {
         User owner = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id: " + userId + "не найден."));
 
+        Long requestId = itemRequestDTO.getRequestId();
+        ItemRequest request = null;
+        if(requestId != null){
+            request = itemRequestRepository.findById(requestId)
+                    .orElseThrow(() -> new NotFoundException("Запрос на вещь с id: " + requestId + "не найден."));
+
+            if(request.getRequestor().getId().equals(userId)){
+                throw new ConditionsNotMetException("Пользователь не может отвечать на свой же запрос");
+            }
+        }
+
         Item item = ItemMapper.mapToItem(itemRequestDTO, owner);
+
+        // т.к. связь bi-directional и хозяин связи item, то присваиваем тут и через переопределенный сеттер, а не в мапере
+        if (request != null) {
+            item.setRequest(request);
+        }
+
         item = itemRepository.save(item);
 
         return ItemMapper.mapToItemDto(item);
     }
 
     @Override
+    @Transactional
     public ItemDto updateItem(long userId, long itemId, UpdateItemRequestDto requestDTO) {
-        User owner = userRepository.findById(userId)
+        userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id: " + userId + " не найден."));
 
-        if (!owner.getId().equals(userId)) {
-            throw new ConditionsNotMetException("Изменять вещь может только ее владелец");
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException("Вещь не найдена"));
+
+        if (!item.getOwner().getId().equals(userId)) {
+            throw new ConditionsNotMetException("Изменять вещь может только владелец");
         }
 
-        Item item = itemRepository.findById(itemId)
-                .map(i -> ItemMapper.updateItemFields(i, requestDTO))
-                .orElseThrow(() -> new NotFoundException("Вещь с id: " + itemId + "не найдена"));
-
-        item = itemRepository.save(item);
+        ItemMapper.updateItemFields(item, requestDTO);
+        itemRepository.save(item);
 
         return ItemMapper.mapToItemDto(item);
-
     }
 
     @Override

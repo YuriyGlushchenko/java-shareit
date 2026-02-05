@@ -46,7 +46,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<RequestDto> getRequests(Long userId) {
+    public List<RequestDto> getOtherUsersRequests(Long userId) {
         //  Возможно, тут эта проверка и не нужна? Незарегистрированный пользователь пусть смотрит запросы?
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id: " + userId + "не найден."));

@@ -9,6 +9,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.NewItemRequestDto;
 import ru.practicum.shareit.item.dto.UpdateItemRequestDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
@@ -31,20 +32,8 @@ public final class ItemMapper {
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
+                .requestId(item.getRequest() != null ? item.getRequest().getId() : null)
                 .build();
-    }
-
-    public static Item updateItemFields(Item item, UpdateItemRequestDto request) {
-        if (request.hasName()) {
-            item.setName(request.getName());
-        }
-        if (request.hasDescription()) {
-            item.setDescription(request.getDescription());
-        }
-        if (request.hasAvailable()) {
-            item.setAvailable(request.getAvailable());
-        }
-        return item;
     }
 
     public static ItemDto mapToItemDto(Item item, Booking lastBooking, Booking nextBooking) {
@@ -53,6 +42,7 @@ public final class ItemMapper {
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
+                .requestId(item.getRequest() != null ? item.getRequest().getId() : null)
                 .lastBooking(BookingMapper.toShortDto(lastBooking))
                 .nextBooking(BookingMapper.toShortDto(nextBooking))
                 .build();
@@ -69,9 +59,23 @@ public final class ItemMapper {
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
+                .requestId(item.getRequest() != null ? item.getRequest().getId() : null)
                 .lastBooking(BookingMapper.toShortDto(lastBooking))
                 .nextBooking(BookingMapper.toShortDto(nextBooking))
                 .comments(comments)
                 .build();
+    }
+
+    public static Item updateItemFields(Item item, UpdateItemRequestDto request) {
+        if (request.hasName()) {
+            item.setName(request.getName());
+        }
+        if (request.hasDescription()) {
+            item.setDescription(request.getDescription());
+        }
+        if (request.hasAvailable()) {
+            item.setAvailable(request.getAvailable());
+        }
+        return item;
     }
 }

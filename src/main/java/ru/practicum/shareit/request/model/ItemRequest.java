@@ -43,6 +43,7 @@ public class ItemRequest {
     @Builder.Default
     private LocalDateTime created = LocalDateTime.now();
 
+    // bidirectional для получения списка itemRequest сразу с items одним запросом с JOIN FETCH (без N+1)
     @OneToMany(mappedBy = "request", fetch = FetchType.LAZY)
     @ToString.Exclude
     @Builder.Default

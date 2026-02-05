@@ -32,7 +32,7 @@ public class ItemRequestController {
 
     @GetMapping("/all")
     public List<RequestDto> getRequests(@RequestHeader("X-Sharer-User-Id") Long userId) {
-        return itemRequestService.getRequests(userId);
+        return itemRequestService.getOtherUsersRequests(userId);
 
     }
 
