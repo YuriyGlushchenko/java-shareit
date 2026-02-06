@@ -28,7 +28,7 @@ public final class ItemRequestMapper {
     public static RequestDto mapToFullRequestDto(ItemRequest itemRequest) {
         RequestDto dto = mapToBaseRequestDto(itemRequest);
 
-        dto.setAnswers(mapToAnswerDtos(itemRequest.getItems()));
+        dto.setItems(mapToAnswerDtos(itemRequest.getItems()));
 
         return dto;
     }
@@ -44,7 +44,7 @@ public final class ItemRequestMapper {
         return dto;
     }
 
-    private static List<RequestDto.AnswerDto> mapToAnswerDtos(List<Item> items) {
+    private static List<RequestDto.RequestItemDtoShort> mapToAnswerDtos(List<Item> items) {
         if (items == null || items.isEmpty()) {
             return Collections.emptyList();
         }
@@ -54,12 +54,12 @@ public final class ItemRequestMapper {
                 .collect(Collectors.toList());
     }
 
-    private static RequestDto.AnswerDto mapToAnswerDto(Item item) {
+    private static RequestDto.RequestItemDtoShort mapToAnswerDto(Item item) {
         if (item == null) {
             return null;
         }
 
-        return RequestDto.AnswerDto.builder()
+        return RequestDto.RequestItemDtoShort.builder()
                 .id(item.getId())
                 .name(item.getName())
                 .ownerId(item.getOwner() != null ? item.getOwner().getId() : null)

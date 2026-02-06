@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import ru.practicum.shareit.exceptions.exceptions.NotFoundException;
-import ru.practicum.shareit.exceptions.exceptions.ValidationException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,9 +52,6 @@ public class ExceptionsLoggingAspect {
         switch (exception) {
             case MethodArgumentNotValidException methodArgumentNotValidException ->
                     message.append(" | ").append(getValidationDetails(methodArgumentNotValidException));
-            case ValidationException validationException ->
-                    message.append(" | ").append(getValidationExceptionDetails(validationException));
-
             case NotFoundException notFoundException ->
                     message.append(" | ").append(getNotFoundExceptionDetails(notFoundException));
             default -> {
@@ -77,14 +73,6 @@ public class ExceptionsLoggingAspect {
                 ))
                 .collect(Collectors.joining("; "));
     }
-
-    private String getValidationExceptionDetails(ValidationException ex) {
-        return String.format("Поле '%s': значение '%s' - %s",
-                ex.getFieldName(),
-                ex.getRejectedValue(),
-                ex.getMessage());
-    }
-
 
     private String getNotFoundExceptionDetails(NotFoundException ex) {
         StackTraceElement topElement = ex.getStackTrace()[0];

@@ -7,12 +7,12 @@ import java.util.List;
 
 @Data
 public class ValidationErrorResponse {
-    private String errorCode;
+    private String error;
     private List<ValidationError> validationErrorList;
     private Date timestamp;
 
     public ValidationErrorResponse(String errorCode, List<ValidationError> validationErrorsList) {
-        this.errorCode = errorCode;
+        this.error = errorCode;
         this.validationErrorList = validationErrorsList;
         this.timestamp = new Date();
     }

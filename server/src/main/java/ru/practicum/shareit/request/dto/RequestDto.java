@@ -18,13 +18,14 @@ public class RequestDto {
     private String description;
     private UserDto requestor;
     private LocalDateTime created;
-    private List<AnswerDto> answers;
+    private List<RequestItemDtoShort> items;
 
     @Data
     @Builder
-    public static class AnswerDto {
+    public static class RequestItemDtoShort {
         private Long id;
         private String name;
         private Long ownerId;
     }
 }
+
