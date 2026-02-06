@@ -16,7 +16,7 @@ public class ItemController {
 
     @PostMapping
     public ItemDto add(@RequestHeader("X-Sharer-User-Id") Long userId,
-                       @RequestBody  NewItemRequestDto item) {
+                       @RequestBody NewItemRequestDto item) {
         return itemService.addNewItem(userId, item);
     }
 
@@ -47,7 +47,7 @@ public class ItemController {
     public CommentDto addComment(
             @PathVariable Long itemId,
             @RequestHeader("X-Sharer-User-Id") Long userId,
-            @RequestBody  NewCommentDto dto
+            @RequestBody NewCommentDto dto
     ) {
         return itemService.addComment(userId, itemId, dto);
     }

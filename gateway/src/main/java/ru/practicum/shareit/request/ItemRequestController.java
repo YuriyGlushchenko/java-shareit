@@ -2,11 +2,9 @@ package ru.practicum.shareit.request;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.dto.NewRequestDtoDetailed;
-import ru.practicum.shareit.request.dto.RequestDto;
-
-import java.util.List;
 
 /**
  * TODO Sprint add-item-requests.
@@ -15,32 +13,32 @@ import java.util.List;
 @RequestMapping(path = "/requests")
 @RequiredArgsConstructor
 public class ItemRequestController {
-//    private final ItemRequestService itemRequestService;
-//
-//    @PostMapping
-//    public RequestDto add(@RequestHeader("X-Sharer-User-Id") Long userId,
-//                          @RequestBody @Valid NewRequestDtoDetailed request) {
-//        return itemRequestService.addNewRequest(userId, request);
-//    }
-//
-//    @GetMapping
-//    public List<RequestDto> getUserRequests(@RequestHeader("X-Sharer-User-Id") Long userId) {
-//        return itemRequestService.getUserRequests(userId);
-//
-//    }
-//
-//    @GetMapping("/all")
-//    public List<RequestDto> getRequests(@RequestHeader("X-Sharer-User-Id") Long userId) {
-//        return itemRequestService.getOtherUsersRequests(userId);
-//
-//    }
-//
-//    @GetMapping("/{requestId}")
-//    public RequestDto getUserRequests(@RequestHeader("X-Sharer-User-Id") Long userId,
-//                                      @PathVariable Long requestId) {
-//        return itemRequestService.getRequest(userId, requestId);
-//
-//    }
+    private final RequestClient requestClient;
+
+    @PostMapping
+    public ResponseEntity<Object> add(@RequestHeader("X-Sharer-User-Id") Long userId,
+                                      @RequestBody @Valid NewRequestDtoDetailed request) {
+        return requestClient.addNewRequest(userId, request);
+    }
+
+    @GetMapping
+    public ResponseEntity<Object> getUserRequests(@RequestHeader("X-Sharer-User-Id") Long userId) {
+        return requestClient.getUserRequests(userId);
+
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<Object> getRequests(@RequestHeader("X-Sharer-User-Id") Long userId) {
+        return requestClient.getOtherUsersRequests(userId);
+
+    }
+
+    @GetMapping("/{requestId}")
+    public ResponseEntity<Object> getUserRequest(@RequestHeader("X-Sharer-User-Id") Long userId,
+                                                 @PathVariable Long requestId) {
+        return requestClient.getRequest(userId, requestId);
+
+    }
 
 
 }

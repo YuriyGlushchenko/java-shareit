@@ -42,11 +42,11 @@ public class ItemServiceImpl implements ItemService {
 
         Long requestId = itemRequestDTO.getRequestId();
         ItemRequest request = null;
-        if(requestId != null){
+        if (requestId != null) {
             request = itemRequestRepository.findById(requestId)
                     .orElseThrow(() -> new NotFoundException("Запрос на вещь с id: " + requestId + "не найден."));
 
-            if(request.getRequestor().getId().equals(userId)){
+            if (request.getRequestor().getId().equals(userId)) {
                 throw new ConditionsNotMetException("Пользователь не может отвечать на свой же запрос");
             }
         }

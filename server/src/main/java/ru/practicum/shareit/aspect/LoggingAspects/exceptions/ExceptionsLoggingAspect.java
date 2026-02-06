@@ -14,7 +14,6 @@ import ru.practicum.shareit.exceptions.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.exceptions.ValidationException;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Aspect
@@ -85,7 +84,6 @@ public class ExceptionsLoggingAspect {
                 ex.getRejectedValue(),
                 ex.getMessage());
     }
-
 
 
     private String getNotFoundExceptionDetails(NotFoundException ex) {

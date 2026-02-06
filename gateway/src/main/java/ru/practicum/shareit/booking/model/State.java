@@ -16,11 +16,6 @@ public enum State {
         this.value = value;
     }
 
-    @JsonValue
-    public String getValue() {
-        return value;
-    }
-
     public static State from(String state) {
         if (state == null || state.isBlank()) {
             return ALL;
@@ -38,5 +33,10 @@ public enum State {
             default -> throw new IllegalArgumentException("Unknown state: " + state);
         };
 
+    }
+
+    @JsonValue
+    public String getValue() {
+        return value;
     }
 }

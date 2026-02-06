@@ -45,6 +45,9 @@ public class Item {
     @JoinColumn(name = "request_id")
     @ToString.Exclude  // Чтобы избежать случайной lazy-загрузки
     private ItemRequest request;
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private Set<Comment> comments = new HashSet<>();
 
     public void setRequest(ItemRequest request) {
         this.request = request;
@@ -52,8 +55,4 @@ public class Item {
             request.getItems().add(this);
         }
     }
-
-    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private Set<Comment> comments = new HashSet<>();
 }

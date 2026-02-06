@@ -20,7 +20,6 @@ import ru.practicum.shareit.exceptions.responses.ValidationError;
 import ru.practicum.shareit.exceptions.responses.ValidationErrorResponse;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -66,7 +65,6 @@ public class GlobalExceptionHandler {
 
         return new ErrorMessage("NOT_FOUND", ex.getMessage());
     }
-
 
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

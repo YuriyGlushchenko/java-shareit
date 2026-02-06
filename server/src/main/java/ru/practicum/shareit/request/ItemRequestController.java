@@ -20,7 +20,7 @@ public class ItemRequestController {
 
     @PostMapping
     public RequestDto add(@RequestHeader("X-Sharer-User-Id") Long userId,
-                          @RequestBody  NewRequestDtoDetailed request) {
+                          @RequestBody NewRequestDtoDetailed request) {
         return itemRequestService.addNewRequest(userId, request);
     }
 
