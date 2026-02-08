@@ -19,7 +19,7 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -111,8 +111,8 @@ class UserServiceImplTest {
 
         UserDto result = userService.updateUser(1L, request);
 
-        assertThat( result.getName(), equalTo("NewName"));
-        assertThat( result.getEmail(), equalTo("new@mail.ru"));
+        assertThat(result.getName(), equalTo("NewName"));
+        assertThat(result.getEmail(), equalTo("new@mail.ru"));
         verify(userRepository).save(existingUser);
     }
 
